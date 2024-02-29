@@ -1,27 +1,32 @@
 import cv2
 import urllib.request
 import numpy as np
+from google.colab.patches import cv2_imshow
 
 def convert_to_grayscale(input_path):
-    # Read the input image from a URL
-    req = urllib.request.urlopen(input_path)
-    arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
-    image = cv2.imdecode(arr, -1)
+    try:
+        # Read the input image from a file path
+        image = cv2.imread(input_path)
 
-    cv2.imshow("Original Image", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        if image is None:
+            print("Error: Unable to read the image from the provided file path.")
+            return
 
-    # Convert the image to grayscale
-    grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # Display the original image
+        cv2_imshow(image)
 
-    cv2.imshow("Grayscale Image", grayscale_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        # Convert the image to grayscale
+        grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        # Display the grayscale image
+        cv2_imshow(grayscale_image)
+
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    input_image_path = "https://unsplash.com/photos/assorted-color-buildings-near-red-boat-docked-on-port-during-daytime-I17LBNJq9q8"
+    input_image_path = "/content/dog.png"
 
     convert_to_grayscale(input_image_path)
 
-    print("Conversion complete. Grayscale image displayed.")
+    print("Conversion complete. Images displayed.")
